@@ -32,6 +32,9 @@ function getFullPrice() {
 
 }
 
+const showTypeOf = function (variable) {
+    console.log(variable, typeof variable);
+}
 
 
 function getTitle(str) {
@@ -55,3 +58,6 @@ getAllServicePrices();
 getFullPrice();
 console.log("Полная стоимость с вычитом отката: ", getServicePercentPrices());
 getTitle(prompt("Как называется ваш проект?", "sdfsadfsdf"));
+showTypeOf(title);
+showTypeOf(screenPrice);
+showTypeOf(adaptive);
