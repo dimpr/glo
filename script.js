@@ -22,35 +22,3 @@ for (let i = 0; i < (week.length); i++) {
         p.className = "weekends";
     }
 }
-
-// div.innerHTML = "<strong>Всем привет!</strong> Вы прочитали важное сообщение.";
-
-
-// dateObj.getDay()
-// 0, 6
-// Необходимо выполнить в отдельном js файле, подключенному к отдельной HTML странице
-// 1) Создать массив week и записать в него дни недели в виде строк
-// Вывести на экран все дни недели
-// Каждый из них с новой строчки
-// Выходные дни - курсивом
-// Текущий день - жирным шрифтом(использовать объект даты)
-// 2) Запушить проект в репозиторий для усложненных заданий на Github
-
-// let div = document.createElement('div');
-// div.className = "alert";
-// div.innerHTML = "<strong>Всем привет!</strong> Вы прочитали важное сообщение.";
-
-// document.body.append(div);
-
-// <script>
-//   ol.before('before'); // вставить строку "before" перед <ol>
-//   ol.after('after'); // вставить строку "after" после <ol>
-
-//   let liFirst = document.createElement('li');
-//   liFirst.innerHTML = 'prepend';
-//   ol.prepend(liFirst); // вставить liFirst в начало <ol>
-
-//   let liLast = document.createElement('li');
-//   liLast.innerHTML = 'append';
-//   ol.append(liLast); // вставить liLast в конец <ol>
-// </script>
