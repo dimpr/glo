@@ -1,57 +1,56 @@
-let userNum, botNum;
+let date = new Date();
+let weekDay = date.getUTCDay() - 1;
+let week = ['Понедельник',
+    'Вторник',
+    'Среда',
+    'Четверг',
+    'Пятница',
+    'Суббота',
+    'Воскресенье'];
 
-const getRandom = function () {
-    let a = Math.floor(Math.random() * 100) + 1;
-    console.log("Бот загадал " + a);
-    return a;
-}
+for (let i = 0; i < (week.length); i++) {
 
-const getUserNum = function () {
-    let b = +prompt("Угадай число от 1 до 100", "");
-    console.log("Человек загадал " + b);
-    return b;
-}
+    let p = document.createElement('p');
+    p.innerHTML = week[i];
+    document.body.append(p);
 
-const isNumber = function (num) {
-    return !isNaN(parseFloat(num)) && isFinite(num);
-}
+    if (weekDay === i) {
+        p.className = "currentDay";
+    }
 
-botNum = getRandom();
-
-
-const game = function (x) {
-
-    userNum = getUserNum();
-    console.log(x);
-
-    if (isNumber(userNum)) {
-
-        if (userNum === x) {
-            return alert("Поздравляю, Вы угадали!!!");
-        } else if (userNum > x) {
-            alert("Загаданное число меньше");
-            game(x);
-        } else if (userNum < x) {
-            alert("Загаданное число больше");
-            game(x);
-        } else if (userNum === null) {
-            return alert("Игра окончена");
-        }
-    } else {
-        alert("Введи число!");
-        game(x);
+    if ((i === 5) || (i === 6)) {
+        p.className = "weekends";
     }
 }
 
-game(botNum);
+// div.innerHTML = "<strong>Всем привет!</strong> Вы прочитали важное сообщение.";
 
 
-// Что должна делать программа:
-// — спрашивает пользователя: "Угадай число от 1 до 100".
-// — если пользовательское число больше, то бот выводит "Загаданное число меньше" и предлагает ввести новый вариант;
-// — если пользовательское число меньше, то бот выводит "Загаданное число больше" и предлагает ввести новый вариант;
-// — если пользователь ввел не число, то выводит сообщение "Введи число!" и предлагает ввести новый вариант;
-// — если пользователь нажимает "Отмена", то игра заканчивается и выводится сообщение "Игра окончена".
-// — если пользовательское число равно загаданному, то игра заканчивается и выводит сообщение "Поздравляю, Вы угадали!!!".
-// Программа должна быть выполнена с помощью рекурсии, без единого цикла.
-// Загаданное число должно храниться «в замыкании»
+// dateObj.getDay()
+// 0, 6
+// Необходимо выполнить в отдельном js файле, подключенному к отдельной HTML странице
+// 1) Создать массив week и записать в него дни недели в виде строк
+// Вывести на экран все дни недели
+// Каждый из них с новой строчки
+// Выходные дни - курсивом
+// Текущий день - жирным шрифтом(использовать объект даты)
+// 2) Запушить проект в репозиторий для усложненных заданий на Github
+
+// let div = document.createElement('div');
+// div.className = "alert";
+// div.innerHTML = "<strong>Всем привет!</strong> Вы прочитали важное сообщение.";
+
+// document.body.append(div);
+
+// <script>
+//   ol.before('before'); // вставить строку "before" перед <ol>
+//   ol.after('after'); // вставить строку "after" после <ol>
+
+//   let liFirst = document.createElement('li');
+//   liFirst.innerHTML = 'prepend';
+//   ol.prepend(liFirst); // вставить liFirst в начало <ol>
+
+//   let liLast = document.createElement('li');
+//   liLast.innerHTML = 'append';
+//   ol.append(liLast); // вставить liLast в конец <ol>
+// </script>
