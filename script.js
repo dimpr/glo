@@ -57,7 +57,7 @@ function getServicePercentPrices() {
     return fullPrice - (fullPrice * (rollback / 100));
 }
 
-const RollBackMessage = function (price) {
+const rollBackMessage = function (price) {
     if (fullPrice >= 30000) {
         return "Даем скидку в 10%";
     } else if ((fullPrice >= 15000) && (fullPrice < 30000)) {
