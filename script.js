@@ -42,13 +42,18 @@ const app = {
             } else if (i === 1) {
                 app.service2 = prompt("Какой дополнительный тип услуги нужен?", "");
             }
-            sum += +prompt("Сколько это будет стоить?", 12000);
+            do {
+                price = prompt("Сколько это будет стоить?", 12000);
+            } while (!app.isNumber(price))
+
+            sum += +price;
         }
+
         return sum;
     },
 
     getFullPrice: function () {
-        return app.screenPrice + app.allServicePrices;
+        return +app.screenPrice + app.allServicePrices;
     },
 
     getTitle: function () {
@@ -60,7 +65,7 @@ const app = {
         return app.fullPrice - (app.fullPrice * (app.rollback / 100));
     },
 
-    RollBackMessage: function (price) {
+    getRollBackMessage: function (price) {
         if (app.fullPrice >= 30000) {
             return "Даем скидку в 10%";
         } else if ((app.fullPrice >= 15000) && (app.fullPrice < 30000)) {
@@ -76,7 +81,7 @@ const app = {
         console.log(app.screens);
         console.log(app.allServicePrices);
         console.log("Полная стоимость" + app.fullPrice);
-        console.log("Скидка: " + app.RollBackMessage(app.fullPrice));
+        console.log("Скидка: " + app.getRollBackMessage(app.fullPrice));
         console.log("Заголовок: " + app.getTitle(app.title));
         console.log("Полная стоимость с вычитом отката: " + app.servicePercentPrices);
         console.log("Доп сервис №1 " + app.service1);
@@ -90,15 +95,3 @@ const app = {
 }
 
 app.start();
-
-
-// 4) Вывести в консоль из метода logger все свойства и методы объекта appData с помощью цикла for in
-
-// Сделать проверку при получении данных:
-// - ответ на вопрос "Как называется ваш проект?" - строка
-// - ответ на вопрос "Какие типы экранов нужно разработать?" - строка
-// - ответ на вопрос "Сколько будет стоить данная работа?" - число
-// - ответ на вопрос "Какой дополнительный тип услуги нужен?" - строка
-// - ответ на вопрос "Сколько это будет стоить?" - число
-// Что значит проверка данных: где должен быть текст там только текст(голые цифры не должно пропускать, а текст с цифрами - должно. Пример: "Купил ВАЗ 2108" - ок, "4567989" - нет), где цифры только цифры!
-// Если проверку не прошло, то переспрашивать
