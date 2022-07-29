@@ -1,21 +1,20 @@
 
 const app = {
     title: "",
-    screens: "",
+    screens: [],
     screenPrice: 0,
     servicePercentPrice: 0,
     allServicePrices: 0,
     rollback: 15,
-    service1: "",
-    service2: "",
+    services: {},
     adaptive: true,
 
     start: function () {
         app.asking();
-        app.allServicePrices = app.getAllServicePrices();
-        app.fullPrice = app.getFullPrice();
-        app.servicePercentPrices = app.getServicePercentPrices();
-        app.title = app.getTitle();
+        app.addPrices();
+        app.getFullPrice();
+        app.getServicePercentPrices();
+        app.getTitle();
         app.logger();
     },
 
@@ -24,45 +23,61 @@ const app = {
     },
 
     asking: function () {
-        app.title = prompt("Как называется ваш проект?", "");
-        app.screens = prompt("Какие типы экранов нужно разработать?", "Простые, Сложные, Интерактивные");
-        app.screenPrice = +prompt("Сколько будет стоить данная работа?", 12000);
+        app.title = prompt("Как называется ваш проект?", "Калькулятор верстки");
 
-        while (!app.isNumber(app.screenPrice)) {
-            app.screenPrice = +prompt("Сколько будет стоить данная работа?", 12000);
-        }
-        app.adaptive = confirm("Нужен ли адаптив на сайте?");
-    },
-
-    getAllServicePrices: function () {
-        let sum = 0;
         for (let i = 0; i < 2; i++) {
-            if (i === 0) {
-                app.service1 = prompt("Какой дополнительный тип услуги нужен?", "");
-            } else if (i === 1) {
-                app.service2 = prompt("Какой дополнительный тип услуги нужен?", "");
-            }
+            let name = prompt("Какие типы экранов нужно разработать?", "Простые");
+            let price = 0;
             do {
-                price = prompt("Сколько это будет стоить?", 12000);
+                price = +prompt("Сколько будет стоить данная работа?", 13000);
+            } while (!app.isNumber(price));
+
+            app.screens.push({ id: i, name, price });
+        }
+
+        for (let i = 0; i < 2; i++) {
+
+            let name = prompt("Какой дополнительный тип услуги нужен?", "Простой");
+            let price = 0;
+
+            do {
+                price = prompt("Сколько это будет стоить?", 11000);
             } while (!app.isNumber(price))
 
-            sum += +price;
+            app.services[name] = +price;
+
         }
 
-        return sum;
+        app.adaptive = confirm("Нужен ли адаптив?");
+    },
+
+    addPrices: function () {
+        const scr = app.screens;
+        app.screenPrice = scr.reduce(function (total, amount) {
+            return total += amount.price;
+        }, 0);
+
+
+        console.log("Цена за поэкранные " + app.screenPrice);
+
+
+        for (let key in app.services) {
+            app.allServicePrices += app.services[key];
+        }
+        console.log("Цена за сервисы " + app.allServicePrices);
     },
 
     getFullPrice: function () {
-        return +app.screenPrice + app.allServicePrices;
+        app.fullPrice = +app.screenPrice + app.allServicePrices;
     },
 
     getTitle: function () {
         let str = app.title.trim();
-        return str[0].toUpperCase() + str.slice(1).toLowerCase();
+        app.title = str[0].toUpperCase() + str.slice(1).toLowerCase();
     },
 
     getServicePercentPrices: function () {
-        return app.fullPrice - (app.fullPrice * (app.rollback / 100));
+        app.servicePercentPrices = app.fullPrice - (app.fullPrice * (app.rollback / 100));
     },
 
     getRollBackMessage: function (price) {
@@ -80,16 +95,11 @@ const app = {
     logger: function () {
         console.log(app.screens);
         console.log(app.allServicePrices);
-        console.log("Полная стоимость" + app.fullPrice);
+        console.log("Полная стоимость " + app.fullPrice);
         console.log("Скидка: " + app.getRollBackMessage(app.fullPrice));
-        console.log("Заголовок: " + app.getTitle(app.title));
+        console.log("Заголовок: " + app.title);
         console.log("Полная стоимость с вычитом отката: " + app.servicePercentPrices);
-        console.log("Доп сервис №1 " + app.service1);
-        console.log("Доп сервис №2 " + app.service2);
-
-        for (let key in app) {
-            console.log(key);
-        }
+        console.log(app.screens);
     }
 
 }
