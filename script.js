@@ -23,10 +23,18 @@ const app = {
     },
 
     asking: function () {
-        app.title = prompt("Как называется ваш проект?", "Калькулятор верстки");
+
+        do {
+            app.title = prompt("Как называется ваш проект?", "Калькулятор верстки");
+        } while (app.isNumber(app.title));
+
 
         for (let i = 0; i < 2; i++) {
-            let name = prompt("Какие типы экранов нужно разработать?", "Простые");
+            let name;
+            do {
+                name = prompt("Какие типы экранов нужно разработать?", "Простые");
+            } while (app.isNumber(name));
+
             let price = 0;
             do {
                 price = +prompt("Сколько будет стоить данная работа?", 13000);
@@ -37,15 +45,22 @@ const app = {
 
         for (let i = 0; i < 2; i++) {
 
-            let name = prompt("Какой дополнительный тип услуги нужен?", "Простой");
+            let name
+            do {
+                name = prompt("Какой дополнительный тип услуги нужен?", "Простой");
+            } while (app.isNumber(name));
+
             let price = 0;
 
             do {
                 price = prompt("Сколько это будет стоить?", 11000);
             } while (!app.isNumber(price))
 
-            app.services[name] = +price;
-
+            if (name in app.services) {
+                app.services[name + i] = +price;
+            } else {
+                app.services[name] = +price;
+            }
         }
 
         app.adaptive = confirm("Нужен ли адаптив?");
@@ -57,9 +72,7 @@ const app = {
             return total += amount.price;
         }, 0);
 
-
         console.log("Цена за поэкранные " + app.screenPrice);
-
 
         for (let key in app.services) {
             app.allServicePrices += app.services[key];
@@ -97,9 +110,10 @@ const app = {
         console.log(app.allServicePrices);
         console.log("Полная стоимость " + app.fullPrice);
         console.log("Скидка: " + app.getRollBackMessage(app.fullPrice));
-        console.log("Заголовок: " + app.title);
+        console.log("Заголовок: " + app.title, typeof app.title);
         console.log("Полная стоимость с вычитом отката: " + app.servicePercentPrices);
         console.log(app.screens);
+        console.dir(app.services);
     }
 
 }
