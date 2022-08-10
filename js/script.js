@@ -1,3 +1,30 @@
+const title = document.getElementsByTagName('h1')[0].innerHTML;
+console.log(title);
+
+const handlerBtn = document.getElementsByClassName('handler_btn');
+console.dir(handlerBtn);
+
+const plusBtn = document.querySelector(".screen-btn");
+console.dir(plusBtn);
+
+const otherItemsPercent = document.querySelectorAll(".other-items.percent");
+console.dir(otherItemsPercent);
+
+const otherItemsNumber = document.querySelectorAll(".other-items.number");
+console.dir(otherItemsNumber);
+
+const inputRange = document.querySelector(".rollback input[type='range']");
+console.dir(inputRange);
+
+const rangeValue = document.querySelector(".rollback span.range-value");
+console.dir(rangeValue);
+
+const totalInput = document.getElementsByClassName("total-input");
+console.dir(totalInput);
+
+let allScreen = document.querySelectorAll(".screen");
+console.dir(allScreen);
+
 
 const app = {
     title: "",
@@ -119,3 +146,5 @@ const app = {
 }
 
 app.start();
+
+
