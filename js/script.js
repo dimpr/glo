@@ -14,8 +14,20 @@ const totalCount = document.getElementsByClassName("total-input")[1];
 const totalCountOther = document.getElementsByClassName("total-input")[2];
 const fullTotalCount = document.getElementsByClassName("total-input")[3];
 const totalCountRollback = document.getElementsByClassName("total-input")[4];
+const rollbackRange = document.getElementsByClassName('rollback');
+const rollback = document.getElementById('total-count-rollback');
+
 
 let screens = document.querySelectorAll(".screen");
+
+let inputsScreen = document.querySelectorAll(".screen > .main-controls__select > select")[0];
+console.log(inputsScreen);
+let inputsScreenNumber = document.querySelectorAll(".screen > .main-controls__input > input")[0];
+console.log(inputsScreenNumber);
+startBtn.disabled = true;
+
+
+
 
 
 const app = {
@@ -29,36 +41,57 @@ const app = {
     servicesPercent: {},
     servicesNumber: {},
     adaptive: true,
+    count: 0,
+
+    // Продублировал функцию прослушки и логер тк не знал как ее назначить на уже созданный ряд изнутри клона, а если не внутри клона делать
+    // то тогда не понятно как она будет получать клонированные колонки контекст вызова не работал
+
+    logger: function (event) {
+        if ((inputsScreen.selectedIndex > 0) && (inputsScreenNumber.value !== "")) {
+            startBtn.disabled = false;
+        }
+    },
+
+    checkChange: function () {
+        inputsScreen.addEventListener('change', app.logger);
+        inputsScreenNumber.addEventListener('input', app.logger);
+    },
+
+    //////////////////////////////
 
     init: function () {
         app.addTitle();
-
         startBtn.addEventListener('click', app.start);
         plusBtn.addEventListener('click', app.addSceenBlock);
-
+        inputRange.addEventListener('input', app.changeRollbackRange);
+        app.checkChange();
     },
+
     addTitle: function () {
         document.title = title.textContent;
     },
+
     start: function () {
-        alert('VVV');
-        app.addSceens();
+        app.addScreens();
         app.addServices();
         app.addPrices();
         // app.getServicePercentPrices();
-
-        console.log(app);
         app.showResult();
     },
+
     showResult: function () {
         total.value = app.screenPrice;
         totalCountOther.value = app.servicePricesPercent + app.servicePricesNumber;
         fullTotalCount.value = app.fullPrice;
     },
-    addSceens: function () {
-        screens = document.querySelectorAll(".screen"); //? почему его скопировали сюда? зачем переопределили?
+
+    addScreens: function () {
+
+        screens = document.querySelectorAll(".screen"); //почему мы ее переопределили? почему функция не может писать во внешнюю переменную…
 
         screens.forEach(function (screen, index) {
+
+
             const select = screen.querySelector('select');
             const input = screen.querySelector('input');
             const selectName = select.options[select.selectedIndex].textContent;
@@ -66,10 +99,42 @@ const app = {
             app.screens.push({
                 id: index,
                 name: selectName,
-                price: +select.value * +input.value
+                price: +select.value * +input.value,
+
             });
+            app.count += +input.value;
         });
     },
+
+    /// сначала вывел логер в отдельную функцию но доллго не мог понять как в него передать обьект прослушки, все время выдавал ошибку решеил сделать стрелками
+    addSceenBlock: function () {
+        startBtn.disabled = true;
+        const cloneScreens = screens[0].cloneNode(true);
+        screens[screens.length - 1].after(cloneScreens);
+
+        console.log(cloneScreens);
+        let cloneSelect = cloneScreens.querySelector('.main-controls__select > select');
+        let cloneInput = cloneScreens.querySelector('.main-controls__input > input');
+
+        cloneSelect.addEventListener('change', () => {
+            if ((cloneSelect.selectedIndex > 0) && (cloneInput.value !== "")) {
+                startBtn.disabled = false;
+            }
+        });
+
+        cloneInput.addEventListener('input', () => {
+            if ((cloneSelect.selectedIndex > 0) && (cloneInput.value !== "")) {
+                startBtn.disabled = false;
+            }
+        });
+
+    },
+
+    changeRollbackRange: function (e) {
+        rangeValue.textContent = e.target.value + '%';
+        app.rollback = e.target.value;
+    },
+
     addServices: function () {
 
         otherItemsPercent.forEach(function (item) {
@@ -94,11 +159,6 @@ const app = {
         });
     },
 
-    addSceenBlock: function () {
-        const cloneScreens = screens[0].cloneNode(true);
-
-        screens[screens.length - 1].after(cloneScreens);
-    },
 
     addPrices: function () {
         const scr = app.screens;
@@ -115,39 +175,17 @@ const app = {
         }
 
         app.fullPrice = +app.screenPrice + app.servicePricesPercent + app.servicePricesNumber;
+
+        // Здесь странная логика была(был -), но к общей стоимости же надо добавить (+) откат чтобы получить "Стоимость с учетом отката"
+        app.servicePercentPrices = app.fullPrice + (app.fullPrice * (app.rollback / 100));
+
+        rollback.value = app.servicePercentPrices;
+
+        totalCount.value = app.count;
     },
 
-    getServicePercentPrices: function () {
-        app.servicePercentPrices = app.fullPrice - (app.fullPrice * (app.rollback / 100));
-    },
-
-    getRollBackMessage: function (price) {
-        if (app.fullPrice >= 30000) {
-            return "Даем скидку в 10%";
-        } else if ((app.fullPrice >= 15000) && (app.fullPrice < 30000)) {
-            return "Даем скидку в 5%";
-        } else if ((0 <= app.fullPrice) && (app.fullPrice < 15000)) {
-            return "Скидка не предусмотрена";
-        } else if (app.fullPrice < 0) {
-            return "Что то пошло не так";
-        }
-    },
 }
 
 app.init();
 
 
-
-
-
-
-// logger: function () {
-//     console.log(app.screens);
-//     console.log(app.allServicePrices);
-//     console.log("Полная стоимость " + app.fullPrice);
-//     console.log("Скидка: " + app.getRollBackMessage(app.fullPrice));
-//     console.log("Заголовок: " + app.title, typeof app.title);
-//     console.log("Полная стоимость с вычитом отката: " + app.servicePercentPrices);
-//     console.log(app.screens);
-//     console.dir(app.services);
-// }
